@@ -49,9 +49,9 @@ def get_face_mesh(img):
             success, rot_vec, trans_vec=cv2.solvePnP(face_3d, face_2d, cam_matrix, dist_matrix)
             rmat, jac= cv2.Rodrigues(rot_vec)
             angles, mtxR, mtxQ, Qx,Qy,Qz=cv2.RQDecomp3x3(rmat)
-            x=angles[0]*360
-            y=angles[1]*360
-            z=angles[2]*360
+            x=angles[0]*360 # Pitching, 위보기는 +,  아래 보기는 -
+            y=angles[1]*360 # Yawing, 본인 기준 오른쪽 보기 +, 왼쪽 보기 -
+            z=angles[2]*360 # Rolling, 본인 기준 오른쪽으로 머리 기울기 +, 왼쪽으로 머리 기울기 -
 
             if y<-10:
                 text="looking left"
