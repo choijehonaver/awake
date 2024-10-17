@@ -15,8 +15,9 @@ face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_con
 mp_drawing = mp.solutions.drawing_utils
 drawing_spec=mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
+
 def get_face_mesh(img):
-    start = time.time()
+    start = time.perf_counter()
     # image = cv2.cvtColor(cv2.flip(img, 1), cv2.COLOR_BGR2RGB)
     image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
@@ -26,6 +27,7 @@ def get_face_mesh(img):
     img_h, img_w, img_c=image.shape
     face_3d=[]
     face_2d=[]
+    fps =  1
 
     if results.multi_face_landmarks:
         for face_landmarks in results.multi_face_landmarks:
@@ -73,9 +75,12 @@ def get_face_mesh(img):
             cv2.putText(image, "y: " + str(np.round(y, 2)), (500, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.putText(image, "z: " + str(np.round(z, 2)), (500, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-            end=time.time()
+            end=time.perf_counter()
             totalTime=end-start
-            fps=1/totalTime
+            if not totalTime==0:
+                fps=1/totalTime
+            else:
+                totalTime=1
             print("FPS: ", fps)
 
             cv2.putText(image, f'FPS: {int(fps)}', (20, 450), cv2.FONT_HERSHEY_SIMPLEX, 1.5,(0,255,0),2)
