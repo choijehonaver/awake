@@ -1,29 +1,23 @@
-# Head Pose Estimation Program
+# Private library - Head Pose Estimation by MediaPipe
 # Karamelsoft Inc 2024
 # Inspired by Nicolai Nielson youtube https://www.youtube.com/watch?v=-toNMaS4SeQ&t=475s
 # pip install mediapipe
-# Install 'cv2', 'streamlit' library by 'pip3 install opencv-python' and 'pip3 install streamlit'
-# Open a new Terminal, type 'streamlit run fadevmain.py' to run this main program
 
-
-
+# import public library
 import cv2
 import mediapipe as mp
 import numpy as np
 import time
+
+# Head Pose Estimation module
 mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 mp_drawing = mp.solutions.drawing_utils
 drawing_spec=mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
-vid = 'demovid.mp4'
-# cap=cv2.VideoCapture(0)
-cap=cv2.VideoCapture(vid)
-
-while cap.isOpened():
-    success, image = cap.read()
+def get_face_mesh(img):
     start = time.time()
-    image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
+    image = cv2.cvtColor(cv2.flip(img, 1), cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
     results=face_mesh.process(image)
     image.flags.writeable=True
@@ -92,10 +86,7 @@ while cap.isOpened():
                 landmark_drawing_spec=drawing_spec,
                 connection_drawing_spec=drawing_spec
             )
-        cv2.imshow('Head Pose Estimation', image)
-
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
-cap.release()
-
-
+    return image
+        
+if __name__ == "__main__":
+  print("This is not a main program.")
