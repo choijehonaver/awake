@@ -17,7 +17,8 @@ drawing_spec=mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
 
 def get_face_mesh(img):
     start = time.time()
-    image = cv2.cvtColor(cv2.flip(img, 1), cv2.COLOR_BGR2RGB)
+    # image = cv2.cvtColor(cv2.flip(img, 1), cv2.COLOR_BGR2RGB)
+    image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
     results=face_mesh.process(image)
     image.flags.writeable=True

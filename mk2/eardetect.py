@@ -9,7 +9,7 @@ import make_train_data as mtd
 import timeit
 from threading import Thread
 from scipy.spatial import distance as dist
-import ringing_alarm as alarm
+# import ringing_alarm as alarm
 
 # Original AWAKE Detection module
 detector = dlib.get_frontal_face_detector()
@@ -91,9 +91,9 @@ def get_ear_value(img):
                 test_data.append([OPENED_EYES_TIME, round(closing_time * 10, 3)])
                 result = mtd.run([OPENED_EYES_TIME, closing_time * 10], power, nomal, short)
                 result_data.append(result)
-                t = Thread(target=alarm.select_alarm, args=(result,))
-                t.deamon = True
-                t.start()
+                # t = Thread(target=alarm.select_alarm, args=(result,))
+                # t.deamon = True
+                # t.start()
     else:
         COUNTER = 0
         TIMER_FLAG = False

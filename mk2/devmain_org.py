@@ -19,8 +19,7 @@ import facemesh as fm
 
 # Main Page title, icon
 st.set_page_config(page_title='Face Analysis Dev Tool',
-                   page_icon='karamellogo.ico',
-                   layout='wide')
+                   page_icon='karamellogo.ico',)
 
 # Main Page left side bar(menu)
 with st.sidebar:
@@ -52,6 +51,7 @@ vid_file = 'None'
 # Streamlit은 버튼입력 시 동영상이 초기화됨 따라서 프레임번호를 기억해야 함
 if 'frame_no' not in st.session_state:
     st.session_state.frame_no = 0  # 처음 시작할 때 프레임 번호는 0
+
 if ear_data not in st.session_state:
   st.session_state.chart_data = ear_data
 
@@ -59,14 +59,10 @@ folder_name = "processed"
 if not os.path.exists(folder_name):
   os.mkdir(folder_name)
 
-with main_tab:      
+with main_tab:  
+    
   save_result = st.button('Save Result', key='1')
   on = st.toggle('Play video', key='2')
-  col_img_org, col_img_proc = st.columns(2)
-  with col_img_org:
-    left_image_placeholder = st.empty()
-  with col_img_proc:
-    right_image_placeholder = st.empty()
 
   if uploaded_file_vid is not None:
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
@@ -77,20 +73,22 @@ with main_tab:
   if vid_file != 'None':
     cap = cv2.VideoCapture(vid_file)
     cap.set(cv2.CAP_PROP_POS_FRAMES, st.session_state.frame_no)
-    if cap.isOpened():      
+
+    if cap.isOpened():
+      
       while True:  
-        ret, img_source = cap.read()               
+        ret, img = cap.read()               
         if ret :
-          img_resize = imutils.resize(img_source, width=800)
+          img = imutils.resize(img, width=400)
           frame_order += 1            
           file_name = os.path.join(folder_name, f'{frame_order}.png') 
+
           if mode == "MediaPipe":
-            img = fm.get_face_mesh(img_resize)
-            left_image_placeholder.image(img_resize, channels='BGR')
-            right_image_placeholder.image(img, channels='BGR')
+            img = fm.get_face_mesh(img)
+            frame_placeholder.image(img, channels='BGR')
 
           else: # Dlib
-            ear_value, img = ed.get_ear_value(img_resize)
+            ear_value, img = ed.get_ear_value(img)
             frame_placeholder.image(img, channels='BGR')       
             st.session_state.chart_data.append(ear_value)        
             chart_data = pd.Series(st.session_state.chart_data)
